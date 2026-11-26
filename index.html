@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Mohinga Morning · မုန့်ဟင်းခါး ဆိုင်</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Noto+Sans+Myanmar:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#2B1D14; --paper:#FFF8EA; --card:#FFFDF7; --muted:#7A5E48;
+  --turmeric:#F2B544; --broth:#E8893A; --deep:#C2552B; --lacquer:#B8322A; --gold:#E9B949;
+  --green:#5FAE5F; --red:#E5533D; --sky:#8EC9F0; --pink:#F4A6B7;
+  --wob:255px 18px 225px 18px / 18px 225px 18px 255px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{
+  font-family:'Patrick Hand','Noto Sans Myanmar','Myanmar Text','Padauk',system-ui,sans-serif;
+  color:var(--ink); min-height:100vh; display:flex; justify-content:center;
+  background-color:var(--paper);
+  background-image:radial-gradient(#E9D9BC 1.2px, transparent 1.3px);
+  background-size:20px 20px;
+}
+.my{font-family:'Noto Sans Myanmar','Myanmar Text','Padauk',sans-serif;line-height:1.75}
+#app{position:relative;z-index:1;width:100%;max-width:480px;padding:14px 16px 32px}
+.screen{display:none}
+.screen.active{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* doodle svgs */
+svg.doodle{width:100%;height:100%;display:block;overflow:visible}
+.art{display:inline-block;flex:none}
+
+/* background souvenirs */
+#bg-deco{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+#bg-deco .art{position:absolute;width:90px;height:90px;opacity:.16}
+
+/* longyi wave (acheik-inspired) band */
+.acheik{
+  height:22px;border:2.5px solid var(--ink);border-radius:6px 10px 6px 12px;
+  background:#FFF3DC url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='22'%3E%3Cpath d='M0 5 q10 -6 20 0 t20 0' stroke='%23B8322A' stroke-width='3' fill='none'/%3E%3Cpath d='M0 11 q10 6 20 0 t20 0' stroke='%23E9B949' stroke-width='3' fill='none'/%3E%3Cpath d='M0 17 q10 -6 20 0 t20 0' stroke='%235FAE5F' stroke-width='3' fill='none'/%3E%3C/svg%3E") repeat-x center;
+  margin:10px 0;
+}
+
+.card{
+  background:var(--card);border:2.5px solid var(--ink);border-radius:var(--wob);
+  padding:16px;margin-bottom:16px;box-shadow:4px 5px 0 var(--ink);position:relative;
+}
+h1{font-size:34px;line-height:1.15;font-weight:400}
+h2{font-size:24px;font-weight:400}
+.sub{color:var(--muted);font-size:17px}
+.center{text-align:center}
+.btn{
+  display:block;width:100%;border:2.5px solid var(--ink);border-radius:var(--wob);padding:12px 16px;
+  font:inherit;font-size:22px;background:var(--deep);color:#fff;box-shadow:4px 5px 0 var(--ink);
+  cursor:pointer;transition:transform .08s, box-shadow .08s;
+}
+.btn .my{font-size:17px}
+.btn:active{transform:translate(3px,4px);box-shadow:1px 1px 0 var(--ink)}
+.btn.ghost{background:var(--card);color:var(--ink);font-size:18px;margin-top:12px}
+.btn:disabled{opacity:.45}
+
+/* start */
+.hero{width:190px;height:190px;margin:4px auto 0;animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px) rotate(-3deg)}}
+.bunting{display:flex;justify-content:space-between;margin:-4px 6px 4px}
+.bunting .art{width:46px;height:46px;animation:sway 3s ease-in-out infinite;transform-origin:50% 90%}
+.bunting .art:nth-child(2n){animation-delay:-1.5s}
+@keyframes sway{50%{transform:rotate(8deg)}}
+.treasures{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+.treasure{text-align:center}
+.treasure .art{width:64px;height:64px;transition:transform .2s}
+.treasure:hover .art{transform:rotate(-8deg) scale(1.08)}
+.treasure .my{font-size:13px;display:block;font-weight:700}
+.treasure small{color:var(--muted);font-size:14px}
+.menu{display:grid;gap:8px;margin-top:6px}
+.menu-item{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border:2px dashed #CDB79A;border-radius:12px 18px 12px 16px;font-size:18px}
+.tag{font-size:15px;padding:0 10px;border:2px solid var(--ink);border-radius:99px;background:var(--green);color:#fff}
+.tag.soon{background:#E6D6BE;color:var(--ink)}
+ol.how{padding-left:22px;font-size:18px}
+ol.how li{margin:4px 0}
+
+/* HUD */
+.hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:6px}
+.pill{background:var(--card);border:2.5px solid var(--ink);border-radius:99px;padding:3px 12px;font-size:18px;box-shadow:2px 3px 0 var(--ink);display:flex;align-items:center;gap:4px}
+.pill .my{font-size:14px}
+svg.mini{width:20px;height:20px;display:inline-block;vertical-align:middle}
+
+/* Level 1 */
+.track{display:flex;align-items:center;gap:4px;margin-top:12px}
+.dot{width:36px;height:36px;border:2.5px solid var(--ink);border-radius:50% 45% 55% 48%;display:grid;place-items:center;background:#F3E6D0;font-size:18px;flex:none}
+.dot.done{background:var(--green);color:#fff}
+.dot.now{background:var(--turmeric);animation:pulse 1s infinite}
+.dot.goal{background:#fff;border-style:dashed;padding:2px}
+.dot.goal .art{width:26px;height:26px}
+.bar-line{flex:1;height:0;border-top:2.5px dashed var(--ink);opacity:.5}
+@keyframes pulse{50%{transform:scale(1.12)}}
+.prompt{font-size:18px;text-align:center;margin-bottom:10px}
+.prompt .my{font-size:14px}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{
+  border:2.5px solid var(--ink);background:#fff;border-radius:var(--wob);padding:10px 6px;font:inherit;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:0;box-shadow:3px 4px 0 var(--ink);min-height:128px;justify-content:center;color:var(--ink)
+}
+.choice .art{width:74px;height:74px}
+.choice .mm{font-family:'Noto Sans Myanmar','Myanmar Text','Padauk',sans-serif;font-size:14px;font-weight:700;line-height:1.6;text-align:center}
+.choice .en{font-size:16px;color:var(--muted)}
+.choice:active{transform:translate(2px,3px);box-shadow:1px 1px 0 var(--ink)}
+.choice.used{opacity:.25;pointer-events:none}
+.choice.wrong{background:#FDE3DE;animation:shake .35s}
+@keyframes shake{20%,60%{transform:translateX(-6px) rotate(-2deg)}40%,80%{transform:translateX(6px) rotate(2deg)}}
+.choice.hint{background:#FFF1CC;box-shadow:0 0 0 5px rgba(242,181,68,.6),3px 4px 0 var(--ink);animation:pulse 1s infinite}
+.hint-row{display:flex;justify-content:center;margin-top:14px}
+.hint-btn{border:2.5px dashed var(--ink);background:#FFF1CC;border-radius:99px;padding:5px 18px;font:inherit;font-size:19px;cursor:pointer;color:var(--ink)}
+.hint-btn:disabled{opacity:.4}
+.hint-box{display:none;margin-bottom:12px;padding:8px 12px;border:2.5px solid var(--ink);border-radius:var(--wob);background:#FFF1CC;font-size:17px}
+.hint-box.on{display:block;animation:fade .3s}
+.hint-box .my{font-size:14px}
+.work{display:none;text-align:center;padding:6px 0}
+.work.on{display:block}
+.work .art{width:160px;height:160px;animation:workit .55s ease-in-out infinite}
+@keyframes workit{50%{transform:rotate(-8deg) scale(1.05)}}
+.work .mmbig{font-family:'Noto Sans Myanmar','Myanmar Text','Padauk',sans-serif;font-weight:700;font-size:18px;line-height:1.7}
+.prog{height:18px;border:2.5px solid var(--ink);background:#fff;border-radius:99px 80px 99px 90px;overflow:hidden;margin-top:8px}
+.prog > div{height:100%;width:0;background:repeating-linear-gradient(-45deg,var(--turmeric) 0 10px,#F7CB6E 10px 20px)}
+.corner{position:absolute;width:54px;height:54px}
+
+/* results */
+.stars{display:flex;justify-content:center;gap:6px;margin:8px 0}
+.stars svg{width:40px;height:40px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.stat{border:2px dashed #CDB79A;border-radius:12px 16px 12px 18px;padding:6px;text-align:center}
+.stat b{display:block;font-size:26px;font-weight:400}
+.stat span{font-size:15px;color:var(--muted)}
+
+/* Level 2 */
+.shop-sign{display:flex;align-items:flex-end;justify-content:center;gap:6px;margin-bottom:10px}
+.shop-sign .art{width:52px;height:52px;animation:sway 3s ease-in-out infinite;transform-origin:50% 90%}
+.sign-board{background:#8A5A3B;color:#FFF3DC;border:2.5px solid var(--ink);border-radius:var(--wob);padding:2px 18px;box-shadow:3px 4px 0 var(--ink);text-align:center}
+.sign-board .my{font-size:17px;font-weight:700}
+.sign-board small{display:block;font-size:15px;margin-top:-4px}
+.customer{display:flex;gap:10px;align-items:flex-start}
+.face{width:82px;height:82px;flex:none}
+.face.happy{animation:hop .5s}
+@keyframes hop{40%{transform:translateY(-10px)}}
+.bubble{flex:1;background:#fff;border:2.5px solid var(--ink);border-radius:var(--wob);padding:6px 12px;position:relative}
+.bubble .my{font-size:14px}
+.order-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.chip{display:flex;align-items:center;gap:2px;background:#fff;border:2px solid var(--ink);border-radius:99px;padding:0 10px 0 4px;font-size:13px;font-family:'Noto Sans Myanmar','Myanmar Text','Padauk',sans-serif;line-height:1.8}
+.chip .art{width:26px;height:26px}
+.chip.ok{background:#DDF1DA}
+.patience{height:14px;border:2.5px solid var(--ink);background:#fff;border-radius:99px 80px 99px 90px;overflow:hidden;margin-top:10px}
+.patience > div{height:100%;width:100%;background:var(--green);transition:width .1s linear, background .3s}
+.slide-in{animation:slide .4s ease}
+@keyframes slide{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+.bowl-wrap{display:flex;justify-content:center;margin:4px 0}
+.bowl{width:210px;height:210px;position:relative}
+.bowl .topping{position:absolute;width:56px;height:56px;transform:translate(-50%,-50%);animation:drop .25s ease}
+@keyframes drop{from{transform:translate(-50%,-110%) scale(1.4);opacity:0}to{opacity:1}}
+.feedback{text-align:center;font-size:20px;min-height:30px}
+.feedback.good{color:var(--green)} .feedback.bad{color:var(--red)}
+.tops{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.top{
+  border:2.5px solid var(--ink);background:#fff;border-radius:var(--wob);padding:6px 2px;font:inherit;cursor:pointer;color:var(--ink);
+  display:flex;flex-direction:column;align-items:center;box-shadow:3px 4px 0 var(--ink)
+}
+.top .art{width:54px;height:54px}
+.top .mm{font-family:'Noto Sans Myanmar','Myanmar Text','Padauk',sans-serif;font-size:12.5px;font-weight:700;line-height:1.6;text-align:center}
+.top .en{font-size:15px;color:var(--muted);line-height:1.1}
+.top.on{background:#FFE7BF;transform:translate(2px,3px);box-shadow:1px 1px 0 var(--ink)}
+.serve-row{display:grid;grid-template-columns:1fr 2fr;gap:12px}
+.serve-row .btn.ghost{margin-top:0}
+.foot{text-align:center;font-size:16px;color:var(--muted);margin-top:16px}
+
+/* replay-order button */
+.say-btn{float:right;border:2px solid var(--ink);background:#FFF1CC;border-radius:50%;width:34px;height:34px;cursor:pointer;display:grid;place-items:center;padding:0;margin-left:6px}
+.say-btn svg{width:20px;height:20px}
+
+/* name entry */
+.name-input{
+  width:100%;font:inherit;font-size:24px;padding:10px 14px;margin:10px 0 6px;color:var(--ink);
+  border:2.5px solid var(--ink);border-radius:var(--wob);background:#fff;outline:none;text-align:center;
+}
+.name-input:focus{box-shadow:0 0 0 4px rgba(242,181,68,.5)}
+.err{color:var(--red);min-height:22px;font-size:17px}
+
+/* intro scene */
+.scene{position:relative;height:300px;overflow:hidden;padding:0;
+  background:linear-gradient(#FFD9A0 0%,#FFEFD2 55%,#F1DEC0 55.5%,#EBD3AE 100%)}
+.scene .win{position:absolute;left:18px;top:22px;width:130px;height:130px}
+.scene .win{width:110px;height:110px;left:14px;top:16px}
+.scene .gma{position:absolute;left:28%;bottom:-16px;width:175px;height:228px;animation:popin .7s .35s cubic-bezier(.3,1.6,.5,1) both}
+.scene .mom{position:absolute;right:-10px;bottom:-14px;width:195px;height:254px;animation:popin .7s cubic-bezier(.3,1.6,.5,1) both}
+.speaker{display:inline-block;font-size:15px;border:2px solid var(--ink);border-radius:99px;padding:0 10px;background:#FFE7BF;margin-bottom:4px}
+.speaker .my{font-size:13px}
+@keyframes popin{from{transform:translateY(110%)}to{transform:none}}
+.talk-name{font-size:24px}
+.talk-mm{white-space:pre-line;font-family:'Noto Sans Myanmar','Myanmar Text','Padauk',sans-serif;font-size:17px;line-height:1.9;min-height:64px;font-weight:700}
+.talk-en{font-size:20px;color:var(--muted);min-height:54px;margin-top:6px}
+.caret{display:inline-block;width:2px;height:1em;background:var(--ink);vertical-align:-2px;animation:blink .8s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.tap-note{font-size:15px;color:var(--muted);text-align:center;margin-top:4px}
+#btn-go{opacity:0;pointer-events:none;transition:opacity .3s}
+#btn-go.ready{opacity:1;pointer-events:auto}
+</style>
+</head>
+<body>
+
+<!-- hand-drawn wobble filter used by every doodle -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="wob" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="7"/>
+    <feDisplacementMap in="SourceGraphic" scale="2.6"/>
+  </filter>
+</svg>
+
+<div id="bg-deco"></div>
+
+
+<div id="app">
+
+  <!-- START -->
+  <section id="s-start" class="screen active">
+    <div class="bunting" data-bunting></div>
+    <div class="card center">
+      <div class="hero" data-art="mohinga"></div>
+      <h1 class="my" style="font-size:28px">မုန့်ဟင်းခါး ဆိုင်</h1>
+      <h1>Mohinga Morning</h1>
+      <div class="acheik"></div>
+      <p class="sub">Make the noodles, open your Burmese breakfast shop and serve hungry customers!</p>
+    </div>
+
+    <div class="card">
+      <h2>Menu</h2>
+      <div class="menu">
+        <div class="menu-item"><span><span class="my"><b>မုန့်ဟင်းခါး</b></span> · Mohinga</span><span class="tag">Open</span></div>
+        <div class="menu-item"><span><span class="my"><b>အုန်းနို့ခေါက်ဆွဲ</b></span> · Coconut Noodle</span><span class="tag soon">Soon</span></div>
+        <div class="menu-item"><span><span class="my"><b>ခေါက်ဆွဲသုပ်</b></span> · Noodle Salad</span><span class="tag soon">Soon</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>How to play</h2>
+      <ol class="how">
+        <li><b>Level 1:</b> make <span class="my">မုန့်ဖတ်</span> (rice noodles). Tap each step in the right order. Each step takes 3 seconds; wrong taps add +2s. Stuck? Use a hint!</li>
+        <li><b>Level 2:</b> customers order Mohinga with toppings. Pick exactly what they ask for and serve before they lose patience.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2 class="center">Burmese treasures in the shop</h2>
+      <div class="treasures" id="treasures"></div>
+    </div>
+
+    <button class="btn" id="btn-start"><span class="my">စတင်ကစားမယ်</span> · Start</button>
+    <button class="btn ghost" id="btn-skip">Skip to Level 2 · <span class="my">ဆိုင်ဖွင့်မယ်</span></button>
+    <p class="foot" id="best-line"></p>
+  </section>
+
+  <!-- NAME -->
+  <section id="s-name" class="screen">
+    <div class="bunting" data-bunting></div>
+    <div class="card center">
+      <div class="hero" style="width:140px;height:140px" data-art="mohinga"></div>
+      <h2>What's your name?</h2>
+      <p class="my" style="font-size:16px">သင့်နာမည်ကို ရေးပါ</p>
+      <input class="name-input" id="name-input" maxlength="16" autocomplete="off" placeholder="Your name · နာမည်">
+      <div class="err" id="name-err"></div>
+    </div>
+    <button class="btn" id="btn-name">Continue · <span class="my">ဆက်သွားမယ်</span></button>
+    <button class="btn ghost" id="btn-name-back">← Back</button>
+  </section>
+
+  <!-- INTRO -->
+  <section id="s-intro" class="screen">
+    <div class="card scene" id="intro-scene">
+      <div class="win" data-art="window"></div>
+      <div class="gma" id="intro-gma"></div>
+      <div class="mom" id="intro-mom"></div>
+    </div>
+    <div class="card" id="intro-talk">
+      <div class="speaker"><span class="my">အမေ</span> · Mom</div>
+      <div class="talk-name"><b id="talk-name"></b></div>
+      <div class="talk-mm" id="talk-mm"></div>
+      <div class="talk-en" id="talk-en"></div>
+      <div class="tap-note" id="tap-note">Tap to skip</div>
+    </div>
+    <button class="btn" id="btn-go"><span class="my">ဆင်းလာပြီ!</span> · I'm coming! →</button>
+  </section>
+
+  <!-- LEVEL 1 -->
+  <section id="s-l1" class="screen">
+    <div class="hud">
+      <span class="pill"><span class="my">အဆင့် ၁</span> · Level 1</span>
+      <span class="pill" id="l1-clock">0.0s</span>
+    </div>
+    <div class="card">
+      <div class="corner" style="right:-14px;top:-24px" data-art="thanaka"></div>
+      <h2 class="center"><span class="my">မုန့်ဖတ် လုပ်မယ်</span></h2>
+      <p class="sub center"><span data-name></span>, make the rice noodles from scratch</p>
+      <div class="track" id="l1-track"></div>
+    </div>
+
+    <div class="card">
+      <div class="work" id="l1-work">
+        <div class="art" id="l1-work-art"></div>
+        <div class="mmbig" id="l1-work-mm"></div>
+        <div class="sub" id="l1-work-en"></div>
+        <div class="prog"><div id="l1-prog"></div></div>
+      </div>
+      <div id="l1-pick">
+        <p class="prompt">Tap the <b>next step</b> · <span class="my">နောက်တစ်ဆင့်ကို နှိပ်ပါ</span></p>
+        <div class="hint-box" id="l1-hint"></div>
+        <div class="choices" id="l1-choices"></div>
+        <div class="hint-row"><button class="hint-btn" id="btn-hint">Hint (+1s)</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEVEL 1 DONE -->
+  <section id="s-l1done" class="screen">
+    <div class="bunting" data-bunting></div>
+    <div class="card center">
+      <div class="hero" data-art="motephat"></div>
+      <h1 class="my" style="font-size:28px">မုန့်ဖတ် ရပါပြီ!</h1>
+      <p class="sub">Great job, <span data-name></span>! Your rice noodles are ready</p>
+      <div class="stars" id="l1-stars"></div>
+      <div class="stats">
+        <div class="stat"><b id="l1-time">0s</b><span>Time</span></div>
+        <div class="stat"><b id="l1-miss">0</b><span>Wrong taps</span></div>
+        <div class="stat" style="grid-column:span 2"><b id="l1-hints">0</b><span>Hints used</span></div>
+      </div>
+    </div>
+    <button class="btn" id="btn-open"><span class="my">ဆိုင်ဖွင့်မယ်</span> · Open the shop →</button>
+  </section>
+
+  <!-- LEVEL 2 -->
+  <section id="s-l2" class="screen">
+    <div class="shop-sign">
+      <div class="art" data-art="parasol"></div>
+      <div class="sign-board"><span class="my">မုန့်ဟင်းခါး ဆိုင်</span><small><span data-name></span>'s Mohinga Shop · Open!</small></div>
+      <div class="art" data-art="parasol"></div>
+    </div>
+    <div class="hud">
+      <span class="pill" id="l2-count">1/8</span>
+      <span class="pill" id="l2-hearts"></span>
+      <span class="pill" id="l2-kyat">0 Ks</span>
+    </div>
+
+    <div class="card" id="l2-customer-card">
+      <div class="customer">
+        <div class="face" id="l2-face"></div>
+        <div class="bubble">
+          <button class="say-btn" id="btn-say" title="Hear the order again" aria-label="Hear the order again"></button>
+          <div class="my"><span>မင်္ဂလာပါ!</span> <b>မုန့်ဟင်းခါး တစ်ပွဲ</b></div>
+          <div class="sub" style="font-size:16px">One Mohinga, please, with:</div>
+          <div class="order-list" id="l2-order"></div>
+        </div>
+      </div>
+      <div class="patience"><div id="l2-patience"></div></div>
+    </div>
+
+    <div class="bowl-wrap"><div class="bowl"><div data-art="emptybowl" style="width:100%;height:100%"></div><div id="l2-bowl-tops"></div></div></div>
+    <div class="feedback" id="l2-feedback"></div>
+
+    <div class="tops" id="l2-tops"></div>
+    <div class="serve-row">
+      <button class="btn ghost" id="btn-clear">Clear</button>
+      <button class="btn" id="btn-serve"><span class="my">ပေးမယ်</span> · Serve</button>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="s-end" class="screen">
+    <div class="bunting" data-bunting></div>
+    <div class="card center">
+      <div class="hero" id="end-art"></div>
+      <h1 id="end-title">Shop closed!</h1>
+      <p class="sub" id="end-sub"></p>
+      <div class="stars" id="end-stars"></div>
+      <div class="stats">
+        <div class="stat"><b id="end-served">0/8</b><span>Customers served</span></div>
+        <div class="stat"><b id="end-kyat">0 Ks</b><span>Earned</span></div>
+      </div>
+      <div class="acheik"></div>
+      <p class="sub" id="end-best"></p>
+    </div>
+    <button class="btn" id="btn-again"><span class="my">ထပ်ကစားမယ်</span> · Play again</button>
+    <button class="btn ghost" id="btn-shop-again">Replay the shop only</button>
+  </section>
+
+</div>
+
+<script>
+/* =========================================================
+   DOODLES: every picture in the game is hand-drawn SVG
+   ========================================================= */
+const INK = '#2B1D14';
+const S = inner => `<svg class="doodle" viewBox="0 0 100 100" aria-hidden="true"><g filter="url(#wob)" stroke="${INK}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none">${inner}</g></svg>`;
+const drop = (x, y) => `<path d="M${x} ${y} q5 8 0 12 q-5 -4 0 -12z" fill="#8EC9F0" stroke-width="2"/>`;
+const dots = (pts, c = '#A0612B', r = 1.8) => `<g fill="${c}" stroke="none">${pts.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="${r}"/>`).join('')}</g>`;
+const leaf = (x, y, rot, s = 1) => `<path transform="translate(${x} ${y}) rotate(${rot}) scale(${s})" d="M0 0 C-7 -3 -13 -10 -9 -16 C-5 -20 -1 -16 0 -12 C1 -16 5 -20 9 -16 C13 -10 7 -3 0 0Z" fill="#7BC47F"/>`;
+const nest = (x, y) => `<circle cx="${x}" cy="${y}" r="13" fill="#FFF8EA"/><path d="M${x - 9} ${y} a9 9 0 1 1 9 9 a6 6 0 1 1 -6 -6 a3 3 0 1 1 3 3" stroke-width="2"/>`;
+const strands = d => `<path d="${d}" stroke-width="5"/><path d="${d}" stroke="#FFF8EA" stroke-width="2.4"/>`;
+
+const DOODLES = {
+  /* ---- Level 1 steps ---- */
+  /* ဆန်ကို ရေဆေး: black clay bowl of rice on a burlap cloth, being washed */
+  wash: S(`
+    <path d="M2 70 Q10 58 24 62 L80 56 Q96 58 98 72 L92 94 L6 96 Z" fill="#C9A97A"/>
+    <path d="M10 70 L88 64 M8 78 L92 72 M8 86 L92 82 M20 62 L16 96 M36 60 L34 96 M52 58 L52 96 M68 57 L70 96 M84 57 L86 95" stroke="#9C7B4E" stroke-width="1.4"/>
+    <path d="M14 48 Q14 86 50 90 Q86 86 86 48" fill="#2F2A28"/>
+    <path d="M20 60 Q24 78 40 84" stroke="#6B625E" stroke-width="2.5"/>
+    <ellipse cx="50" cy="48" rx="36" ry="12" fill="#3B3432"/>
+    <ellipse cx="50" cy="48" rx="30" ry="9" fill="#8EC9F0"/>
+    <path d="M24 48 Q50 24 76 48 Q50 56 24 48Z" fill="#F4EEE2"/>
+    <path d="M36 40 l4 -1 M44 36 l4 1 M54 35 l3 2 M62 40 l4 0 M40 46 l4 1 M50 42 l4 -1 M58 46 l4 1 M48 48 l3 1" stroke="#C9BBA2" stroke-width="1.6"/>
+    ${drop(28,10)}${drop(48,2)}${drop(68,12)}
+    <path d="M16 36 q-6 -4 -8 -10 M84 36 q6 -4 8 -10 M30 30 q-2 -4 -1 -7 M70 30 q2 -4 1 -7" stroke="#5AA7DA" stroke-width="2.5"/>`),
+  /* ဆန်ကို ကြိတ်: blue grinding machine, wet rice dough coming out into a metal basin */
+  grind: S(`
+    ${strands('M42 4 l4 1 M51 1 l4 -1 M58 5 l4 1')}
+    <rect x="20" y="34" width="9" height="44" fill="#5B8FC9"/>
+    <rect x="71" y="34" width="9" height="44" fill="#5B8FC9"/>
+    <rect x="14" y="28" width="72" height="11" rx="2" fill="#5B8FC9"/>
+    ${dots([[24,33],[40,32],[62,35],[78,31],[24,52],[75,60],[24,68]], '#8A6A52', 1.6)}
+    <path d="M30 8 L70 8 L60 22 L40 22 Z" fill="#B3B3B3"/>
+    <path d="M36 12 L64 12" stroke-width="1.6"/>
+    <rect x="43" y="22" width="14" height="7" fill="#9C9C9C"/>
+    <path d="M44 29 q-6 6 -2 14 q-4 6 2 12 q4 4 10 0 q6 -6 2 -12 q4 -8 -2 -14 z" fill="#FBF8F0"/>
+    <path d="M46 36 q4 2 8 0 M46 46 q4 2 8 0" stroke="#D9CFBE" stroke-width="1.6"/>
+    <path d="M6 70 L94 70 L86 94 L14 94 Z" fill="#C9CDD2"/>
+    <path d="M12 80 Q50 86 88 80" stroke="#E8EBEE" stroke-width="2.5"/>
+    <ellipse cx="50" cy="70" rx="44" ry="8" fill="#DDE1E5"/>
+    <path d="M12 72 q2 -12 12 -8 q4 -10 12 -4 q6 -10 12 -2 q6 -10 12 2 q6 -10 12 2 q6 -8 12 10 Q48 78 12 72Z" fill="#FBF8F0"/>
+    <path d="M26 66 q3 -3 6 0 M48 64 q3 -3 6 0 M66 66 q3 -3 6 0" stroke="#D9CFBE" stroke-width="1.6"/>`),
+  knead: S(`
+    <path d="M40 14 q4 -5 8 0 t8 0 t8 0" stroke-width="2.5"/>
+    <path d="M8 74 L92 74 L86 90 L14 90 Z" fill="#D9A86C"/>
+    <path d="M20 74 Q18 50 50 48 Q82 50 80 74 Z" fill="#FFF3DC"/>
+    <path d="M32 64 q6 -4 12 0 M56 62 q6 -4 12 0" stroke-width="2"/>
+    <path d="M16 52 Q12 34 28 30 Q44 28 46 42 Q46 54 32 56 Q20 58 16 52Z" fill="#E7B48A"/>
+    <path d="M27 33 v7 M34 31 v8 M41 34 v7" stroke-width="2"/>
+    <path d="M84 52 Q88 34 72 30 Q56 28 54 42 Q54 54 68 56 Q80 58 84 52Z" fill="#E7B48A"/>
+    <path d="M73 33 v7 M66 31 v8 M59 34 v7" stroke-width="2"/>`),
+  press: S(`
+    <path d="M20 74 h60 l-5 18 h-50 z" fill="#9C9C9C"/>
+    <ellipse cx="50" cy="74" rx="30" ry="6" fill="#8EC9F0"/>
+    ${strands('M40 50 q-3 8 0 14 t0 12 M47 50 q3 8 0 14 t0 12 M54 50 q-3 8 0 14 t0 12 M61 50 q3 8 0 14 t0 12')}
+    <rect x="32" y="20" width="36" height="32" rx="5" fill="#C9C2B8"/>
+    <path d="M32 30 h36 M32 42 h36" stroke-width="2"/>
+    <path d="M50 20 L50 10 L88 4" stroke-width="7"/><path d="M50 10 L88 4" stroke="#B7793E" stroke-width="3.5"/>
+    <circle cx="50" cy="10" r="3.5" fill="${INK}"/>`),
+  /* ရေနွေးနဲ့တစ်ခါဆေး၊ ရေအေးနဲ့တစ်ခါဆေး: noodles dipped in a hot pot, then a cold pot */
+  rinse: S(`
+    <path d="M10 30 Q14 8 34 10" stroke-width="2.5"/><path d="M29 6 l6 4 l-6 4" stroke-width="2.5"/>
+    <path d="M66 10 Q86 8 90 30" stroke-width="2.5"/><path d="M85 27 l5 4 l4 -6" stroke-width="2.5"/>
+    <path d="M14 50 q-4 -5 0 -10 q4 -5 0 -10 M26 50 q-4 -5 0 -10 q4 -5 0 -10" stroke="#E8893A" stroke-width="2.4"/>
+    <path d="M4 58 h42 l-5 32 h-32z" fill="#A9A9A9"/>
+    <ellipse cx="25" cy="58" rx="21" ry="5" fill="#F5B27A"/>
+    <path d="M54 58 h42 l-5 32 h-32z" fill="#A9A9A9"/>
+    <ellipse cx="75" cy="58" rx="21" ry="5" fill="#8EC9F0"/>
+    <rect x="64" y="51" width="8" height="8" rx="1.5" fill="#E6F4FD" stroke-width="2" transform="rotate(-12 68 55)"/>
+    <rect x="77" y="52" width="8" height="8" rx="1.5" fill="#E6F4FD" stroke-width="2" transform="rotate(10 81 56)"/>
+    ${strands('M43 34 q-2 5 0 10 M50 35 q2 5 0 10 M57 34 q-2 5 0 10')}
+    <path d="M34 18 Q50 22 66 18 L60 32 Q50 36 40 32Z" fill="#E2B866"/>
+    <path d="M38 24 h24 M44 19 l-2 14 M56 19 l2 14" stroke-width="1.6"/>
+    <path d="M66 18 L80 6" stroke-width="4"/>
+    <path d="M18 74 h14 M68 74 h14" stroke="#fff" stroke-width="2.5" opacity=".8"/>`),
+  drain: S(`
+    <path d="M12 42 Q50 50 88 42 L76 74 Q50 82 24 74 Z" fill="#E2B866"/>
+    <path d="M19 52 L81 52 M22 60 L78 60 M25 68 L75 68" stroke-width="2"/>
+    <path d="M30 45 L35 76 M42 47 L44 79 M54 47 L54 80 M66 46 L62 78" stroke-width="2"/>
+    <ellipse cx="50" cy="42" rx="38" ry="8" fill="#FFF8EA"/>
+    <path d="M26 40 q5 -4 10 0 q5 4 10 0 q5 -4 10 0 q5 4 10 0 q5 -4 8 0" stroke-width="2"/>
+    <path d="M30 36 q4 -10 10 -6 q6 -8 12 -2 q6 -8 12 0" fill="#FFF8EA" stroke-width="2"/>
+    ${drop(36,82)}${drop(50,86)}${drop(64,81)}`),
+  motephat: S(`
+    <path d="M6 60 Q28 28 70 32 Q94 36 96 56 Q72 84 30 82 Q10 78 6 60Z" fill="#7BC47F"/>
+    <path d="M10 62 Q50 54 94 48" stroke-width="2"/>
+    <path d="M28 72 l6 -10 M48 74 l4 -14 M68 68 l2 -12 M30 46 l4 10 M54 40 l2 12" stroke-width="1.6"/>
+    ${nest(36, 54)}${nest(64, 50)}${nest(50, 66)}`),
+
+  /* ---- Mohinga bowls ---- */
+  mohinga: S(`
+    <path d="M80 62 L94 96" stroke-width="7"/><path d="M80 62 L94 96" stroke="#D8D8D8" stroke-width="3"/>
+    <circle cx="50" cy="50" r="44" fill="#fff"/>
+    <circle cx="50" cy="50" r="38" stroke-width="1.5"/>
+    <circle cx="50" cy="50" r="34" fill="#E8893A"/>
+    <path d="M28 44 q6 -3 10 1 M58 72 q6 -3 10 1 M66 40 q4 -2 8 1" stroke="#F8C27A" stroke-width="2.5"/>
+    ${strands('M30 74 q4 -3 8 0 t8 0 M54 26 q4 -3 8 0 t8 0')}
+    <path d="M16 34 Q20 20 36 20 Z" fill="#B5D86A"/><path d="M19 32 Q24 24 33 23" stroke-width="1.5"/>
+    <ellipse cx="38" cy="38" rx="10" ry="12" fill="#FFF8EE"/><circle cx="38" cy="40" r="5" fill="#F2A93B"/>
+    <path d="M50 26 q10 -6 18 2 q4 8 -4 12 q-10 4 -14 -4z" fill="#F2C36B"/>
+    <path d="M56 48 q10 -4 14 6 q0 8 -10 8 q-8 -2 -4 -14z" fill="#F2C36B"/>
+    <path d="M34 56 l12 -2 l2 16 l-12 2z" fill="#F3E6D0"/><path d="M40 57 l2 13" stroke-width="1.5"/>
+    ${dots([[56,30],[62,34],[60,52],[64,58]])}
+    ${leaf(22,56,-60,.8)}${leaf(26,64,-110,.7)}${leaf(20,46,-20,.7)}
+    ${dots([[24,74],[28,78],[31,72],[22,80],[34,79],[27,70]], '#C9372C', 1.6)}
+    <ellipse cx="76" cy="56" rx="5" ry="8" fill="#EDEDED" transform="rotate(-22 76 56)"/>`),
+  emptybowl: S(`
+    <circle cx="50" cy="50" r="46" fill="#fff"/>
+    <circle cx="50" cy="50" r="40" stroke-width="1.5"/>
+    <circle cx="50" cy="50" r="36" fill="#E8893A"/>
+    <path d="M26 40 q6 -3 10 1 M60 70 q6 -3 10 1 M64 30 q4 -2 8 1" stroke="#F8C27A" stroke-width="2.5"/>
+    ${strands('M30 54 q5 -4 10 0 t10 0 t10 0 t10 0 M28 62 q5 -4 10 0 t10 0 t10 0 t10 0 M34 46 q5 -4 10 0 t10 0 t10 0')}
+    <circle cx="34" cy="30" r="6" fill="#FBF3E2" stroke-width="2"/><circle cx="34" cy="30" r="2.5" fill="#E8DDB5" stroke-width="1.2"/>
+    <circle cx="70" cy="40" r="5" fill="#FBF3E2" stroke-width="2"/><circle cx="70" cy="40" r="2" fill="#E8DDB5" stroke-width="1.2"/>`),
+
+  /* ---- Toppings ---- */
+  pegyaw: S(`
+    <path d="M12 58 q4 -18 22 -16 q14 4 10 20 q-6 12 -22 8 q-12 -2 -10 -12z" fill="#E9B44C"/>
+    <path d="M44 38 q10 -16 28 -8 q12 10 2 24 q-12 8 -24 2 q-10 -6 -6 -18z" fill="#F2C36B"/>
+    <path d="M46 70 q8 -10 22 -4 q10 8 0 18 q-14 6 -22 -2 q-4 -6 0 -12z" fill="#E9B44C"/>
+    ${dots([[24,56],[32,62],[56,36],[64,44],[54,76],[62,80],[20,64]])}`),
+  ngaphe: S(`
+    <rect x="16" y="22" width="62" height="17" rx="7" fill="#F5EAD6" transform="rotate(-8 47 30)"/>
+    <rect x="22" y="44" width="62" height="17" rx="7" fill="#F5EAD6" transform="rotate(5 53 52)"/>
+    <rect x="14" y="66" width="62" height="17" rx="7" fill="#F5EAD6" transform="rotate(-4 45 74)"/>
+    ${dots([[30,30],[46,28],[60,26],[38,53],[54,54],[70,56],[28,74],[44,75],[60,73]], '#D7B98E', 1.6)}`),
+  nannan: S(`
+    <path d="M50 94 L50 52 M50 74 L30 54 M50 66 L72 46 M50 52 L42 30 M50 58 L62 32" stroke="#3E7D3E" stroke-width="3"/>
+    ${leaf(30,54,-45)}${leaf(72,46,45)}${leaf(42,30,-15)}${leaf(62,32,20)}${leaf(50,52,0,.8)}${leaf(36,80,-70,.8)}`),
+  chili: S(`
+    <ellipse cx="46" cy="66" rx="40" ry="16" fill="#fff"/>
+    <ellipse cx="46" cy="66" rx="32" ry="11" stroke-width="1.5"/>
+    <path d="M20 66 q26 -28 52 0 q-26 10 -52 0z" fill="#D9442E"/>
+    ${dots([[34,60],[42,54],[50,58],[58,62],[46,64],[38,66]], '#7A1E14', 1.6)}
+    <path d="M58 26 q22 -6 32 12 q-10 -4 -26 -2 q-8 0 -6 -10z" fill="#E5533D"/>
+    <path d="M58 26 q-4 -7 3 -11" stroke="#3E7D3E" stroke-width="3"/>`),
+  buthee: S(`
+    <g transform="rotate(-18 50 30)"><rect x="12" y="22" width="76" height="16" rx="8" fill="#F2C36B"/><path d="M22 30 h56" stroke="#8FC26A" stroke-width="3"/></g>
+    <g transform="rotate(-6 50 54)"><rect x="12" y="46" width="76" height="16" rx="8" fill="#E9B44C"/><path d="M22 54 h56" stroke="#8FC26A" stroke-width="3"/></g>
+    <g transform="rotate(8 50 76)"><rect x="12" y="68" width="76" height="16" rx="8" fill="#F2C36B"/><path d="M22 76 h56" stroke="#8FC26A" stroke-width="3"/></g>
+    ${dots([[20,28],[80,26],[18,52],[84,55],[22,74],[80,80]])}`),
+  egg: S(`
+    <ellipse cx="32" cy="56" rx="22" ry="28" fill="#FFF8EE"/><circle cx="32" cy="58" r="12" fill="#F2A93B"/>
+    <ellipse cx="70" cy="52" rx="20" ry="26" fill="#FFF8EE"/><circle cx="70" cy="54" r="11" fill="#F2A93B"/>
+    <path d="M26 54 q3 -3 6 0 M66 50 q3 -3 6 0" stroke="#FCD27D" stroke-width="2"/>`),
+
+  /* ---- Burmese treasures / souvenirs ---- */
+  parasol: S(`
+    <path d="M50 10 L50 4" stroke-width="3"/>
+    <path d="M8 52 Q50 2 92 52 Z" fill="#E5533D"/>
+    <path d="M50 10 L50 52 M50 10 L30 52 M50 10 L70 52 M50 10 L16 52 M50 10 L84 52" stroke-width="1.6"/>
+    <path d="M8 52 q5 6 10 0 q5 6 10 0 q5 6 10 0 q5 6 10 0 q5 6 10 0 q5 6 10 0 q5 6 10 0 q5 6 10 0 q5 6 4 0" stroke-width="2"/>
+    <circle cx="50" cy="32" r="7" fill="#E9B949"/><circle cx="32" cy="42" r="3.5" fill="#E9B949"/><circle cx="68" cy="42" r="3.5" fill="#E9B949"/>
+    <path d="M50 52 L50 90 q0 7 -7 7" stroke-width="4"/>`),
+  pagoda: S(`
+    <path d="M10 94 h80 v-9 h-80z" fill="#E9B949"/>
+    <path d="M20 85 h60 v-9 h-60z" fill="#E9B949"/>
+    <path d="M26 76 Q28 46 50 42 Q72 46 74 76z" fill="#F2C94C"/>
+    <path d="M42 42 Q49 22 50 8 Q51 22 58 42z" fill="#F2C94C"/>
+    <path d="M44 36 h12 M46 28 h8 M47 20 h6" stroke-width="2"/>
+    <path d="M45 8 h10 M47 4 h6" stroke-width="2.5"/>
+    <path d="M78 16 h8 M82 12 v8 M16 26 h6 M19 23 v6" stroke-width="2"/>`),
+  lacquer: S(`
+    <path d="M20 54 v22 q30 14 60 0 v-22" fill="#7E1F1A"/>
+    <path d="M22 64 q7 -5 14 0 t14 0 t14 0 t14 0" stroke="#E9B949" stroke-width="2.2"/>
+    <path d="M16 40 v12 q34 14 68 0 v-12" fill="#B8322A"/>
+    <ellipse cx="50" cy="40" rx="34" ry="10" fill="#C8433A"/>
+    <path d="M30 40 q10 -5 20 0 t20 0" stroke="#E9B949" stroke-width="2"/>
+    <path d="M20 47 q30 10 60 0" stroke="#E9B949" stroke-width="2"/>
+    <ellipse cx="50" cy="31" rx="7" ry="3.5" fill="#E9B949"/>`),
+  chinlone: S(`
+    <circle cx="50" cy="52" r="36" fill="#E2B866"/>
+    <path d="M18 40 Q50 58 82 40 M18 64 Q50 46 82 64 M36 19 Q56 52 36 86 M64 19 Q44 52 64 86" stroke-width="2.6"/>
+    <path d="M30 22 q-10 -6 -16 0 M70 22 q10 -6 16 0" stroke-width="2"/>`),
+  thanaka: S(`
+    <ellipse cx="46" cy="74" rx="40" ry="13" fill="#BDB5A8"/>
+    <path d="M24 72 q22 -10 44 0 q-22 9 -44 0z" fill="#F1DE9C"/>
+    <path d="M56 14 l26 34 l-14 10 l-26 -34z" fill="#C49A6C"/>
+    <ellipse cx="49" cy="19" rx="9" ry="5.5" transform="rotate(-37 49 19)" fill="#E7D3A8"/>
+    <path d="M62 26 l12 16 M58 32 l10 13" stroke-width="1.6"/>`),
+  lotus: S(`
+    <path d="M14 86 Q50 98 86 86" stroke="#3E7D3E" stroke-width="3"/>
+    <path d="M50 80 Q18 84 8 64 Q34 60 50 80z" fill="#F7C3CF"/>
+    <path d="M50 80 Q82 84 92 64 Q66 60 50 80z" fill="#F7C3CF"/>
+    <path d="M50 78 Q24 66 22 40 Q42 48 50 78z" fill="#F4A6B7"/>
+    <path d="M50 78 Q76 66 78 40 Q58 48 50 78z" fill="#F4A6B7"/>
+    <path d="M50 78 Q34 50 50 22 Q66 50 50 78z" fill="#F7B5C4"/>`),
+
+  /* ---- intro scene ---- */
+  window: S(`
+    <rect x="10" y="10" width="80" height="80" fill="#FFD08A"/>
+    <circle cx="44" cy="70" r="18" fill="#F2B544"/>
+    <path d="M44 44 v-8 M26 52 l-6 -6 M62 52 l6 -6" stroke="#E8893A" stroke-width="2.5"/>
+    <path d="M10 72 h80 v18 h-80z" fill="#9CCB8E"/>
+    <path d="M66 72 Q67 62 72 60 Q72 52 72 44 Q72 52 72 60 Q77 62 78 72z" fill="#E9B949" stroke-width="2"/>
+    <rect x="10" y="10" width="80" height="80" stroke-width="5"/>
+    <path d="M50 10 v80 M10 50 h80" stroke-width="3"/>
+    <path d="M4 6 h92" stroke-width="4"/><path d="M8 6 q4 30 0 60 M92 6 q-4 30 0 60" stroke="#E5533D" stroke-width="5"/>`),
+  stairs: S(`
+    <path d="M8 96 V78 H28 V60 H48 V42 H68 V24 H92 V96 Z" fill="#D9A86C"/>
+    <path d="M8 78 H28 M28 60 H48 M48 42 H68 M68 24 H92" stroke-width="2"/>
+    <path d="M18 70 L18 54 M38 52 L38 36 M58 34 L58 18 M80 16 L80 4 M18 54 L80 4" stroke-width="2.5"/>`),
+
+  /* ---- little UI bits ---- */
+  star: S(`<path d="M50 8 L61 36 L92 38 L68 58 L76 90 L50 72 L24 90 L32 58 L8 38 L39 36Z" fill="#F2B544"/>`),
+  starOff: S(`<path d="M50 8 L61 36 L92 38 L68 58 L76 90 L50 72 L24 90 L32 58 L8 38 L39 36Z" fill="#fff"/>`),
+};
+
+/* little hearts and stars for the HUD (no wobble so they stay crisp) */
+const heart = full => `<svg class="mini" viewBox="0 0 24 24"><path d="M12 21 C-1 12 3 2 12 8 C21 2 25 12 12 21Z" fill="${full ? '#E5533D' : '#fff'}" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round"/></svg>`;
+const coin = `<svg class="mini" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#E9B949" stroke="${INK}" stroke-width="2.2"/><path d="M9 12h6" stroke="${INK}" stroke-width="2"/></svg>`;
+const clock = `<svg class="mini" viewBox="0 0 24 24"><circle cx="12" cy="13" r="9" fill="#fff" stroke="${INK}" stroke-width="2.2"/><path d="M12 8v5l3 2" stroke="${INK}" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
+const person = `<svg class="mini" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4.5" fill="#E7B48A" stroke="${INK}" stroke-width="2"/><path d="M4 22 q0 -8 8 -8 q8 0 8 8z" fill="#8EC9F0" stroke="${INK}" stroke-width="2"/></svg>`;
+const art = (key, extra = '') => `<span class="art ${extra}">${DOODLES[key]}</span>`;
+
+/* ---- Doodle customers (with thanaka cheeks and gaung baung) ---- */
+const SKINS  = ['#E7B48A','#D99E6A','#C68652','#F0C49C','#B97A4A'];
+const SHIRTS = ['#8EC9F0','#F4A6B7','#7BC47F','#E9B949','#C3A6E8','#F29E6B'];
+const WRAPS  = ['#F4A6B7','#F29E6B','#FFF3DC','#C3A6E8'];
+const HAIRS_M = ['short','gaung','grey'];        // men
+const HAIRS_F = ['bun','long','greybun'];        // women
+const pick = a => a[Math.floor(Math.random() * a.length)];
+function newCustomer(){
+  const male = Math.random() < .5;
+  const hair = pick(male ? HAIRS_M : HAIRS_F);
+  return { male, hair, old: hair === 'grey' || hair === 'greybun', voiceSeed: Math.floor(Math.random() * 1000),
+           skin: pick(SKINS), shirt: pick(SHIRTS), wrap: pick(WRAPS), thanaka: Math.random() < .7 };
+}
+function customerSVG(c, mood){
+  let back = '', top = '';
+  const cap = col => `<path d="M26 42 q0 -26 24 -26 q24 0 24 26 q-6 -13 -24 -13 q-18 0 -24 13z" fill="${col}"/>`;
+  if (c.hair === 'short') top = cap(INK);
+  if (c.hair === 'grey')  top = cap('#D5D2CC');
+  if (c.hair === 'bun')   top = cap(INK) + `<circle cx="50" cy="14" r="8" fill="${INK}"/><circle cx="61" cy="14" r="4.5" fill="#F4A6B7" stroke-width="2"/>`;
+  if (c.hair === 'greybun') top = cap('#E3E0DA') + `<circle cx="50" cy="14" r="8" fill="#E3E0DA"/><circle cx="61" cy="14" r="4" fill="#fff" stroke-width="2"/>`;
+  if (c.hair === 'long')  { back = `<path d="M24 42 q0 -26 26 -26 q26 0 26 26 v30 h-52z" fill="${INK}"/>`; top = cap(INK) + `<circle cx="70" cy="30" r="4.5" fill="#F2B544" stroke-width="2"/>`; }
+  if (c.hair === 'gaung') top = `<path d="M24 40 q1 -22 26 -22 q25 0 26 22 q-26 -9 -52 0z" fill="${c.wrap}"/><path d="M30 30 q20 -6 40 0" stroke-width="1.6"/><path d="M74 32 q14 -6 12 8 q-8 1 -12 -8z" fill="${c.wrap}"/>`;
+  const cheeks = c.thanaka ? `<g fill="#F1DE9C" stroke="none" opacity=".95"><circle cx="36" cy="54" r="7"/><circle cx="64" cy="54" r="7"/></g>` : '';
+  let eyes = `<circle cx="41" cy="45" r="2.6" fill="${INK}" stroke="none"/><circle cx="59" cy="45" r="2.6" fill="${INK}" stroke="none"/>`;
+  let mouth = `<path d="M43 58 q7 5 14 0" stroke-width="2.5"/>`;
+  if (mood === 'happy') { eyes = `<path d="M37 46 q4 -5 8 0 M55 46 q4 -5 8 0" stroke-width="2.5"/>`; mouth = `<path d="M41 56 q9 12 18 0z" fill="#C9372C" stroke-width="2.5"/>`; }
+  if (mood === 'worried') { mouth = `<path d="M44 60 q3 -3 6 0 t6 0" stroke-width="2.5"/>`; eyes += `<path d="M36 38 l8 -2 M64 38 l-8 -2" stroke-width="2.2"/>`; }
+  if (mood === 'angry') { eyes += `<path d="M35 37 l10 4 M65 37 l-10 4" stroke-width="2.6"/>`; mouth = `<path d="M43 62 q7 -7 14 0" stroke-width="2.5"/>`; }
+  return S(`${back}<path d="M16 100 q0 -24 34 -26 q34 2 34 26z" fill="${c.shirt}"/><path d="M44 76 l6 8 l6 -8" stroke-width="2"/>
+    <circle cx="50" cy="46" r="24" fill="${c.skin}"/>${top}${cheeks}${eyes}${mouth}`);
+}
+
+/* ---- Intro characters, drawn after the family photo ---- */
+const CHAR_WRAP = (inner) => `<svg class="doodle" viewBox="0 0 100 130" aria-hidden="true"><g filter="url(#wob)" stroke="${INK}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none">${inner}</g></svg>`;
+const glasses = (y) => `<circle cx="42" cy="${y}" r="5.5" fill="#fff" fill-opacity=".35" stroke-width="2"/><circle cx="58" cy="${y}" r="5.5" fill="#fff" fill-opacity=".35" stroke-width="2"/><path d="M47.5 ${y} h5 M36.5 ${y-1} l-6 -2 M63.5 ${y-1} l6 -2" stroke-width="2"/>`;
+
+/* Grandma: short white hair, glasses, cream blouse, cream longyi with brown pattern, striped tote bag */
+function grandmaSVG(){
+  const skin = '#E2B48E';
+  return CHAR_WRAP(`
+    <path d="M30 130 L32 84 H68 L70 130Z" fill="#EFE3C8"/>
+    <path d="M38 88 q-4 8 0 14 q4 6 0 12 M50 88 q-4 8 0 14 q4 6 0 12 M62 88 q-4 8 0 14 q4 6 0 12" stroke="#8A6A3B" stroke-width="2"/>
+    <g fill="#7A6440" stroke="none"><ellipse cx="44" cy="96" rx="2.6" ry="3.6"/><ellipse cx="56" cy="96" rx="2.6" ry="3.6"/><ellipse cx="44" cy="112" rx="2.6" ry="3.6"/><ellipse cx="56" cy="112" rx="2.6" ry="3.6"/><ellipse cx="50" cy="124" rx="2.6" ry="3.6"/><ellipse cx="38" cy="122" rx="2.2" ry="3"/><ellipse cx="62" cy="122" rx="2.2" ry="3"/></g>
+    <path d="M22 92 q0 -26 28 -28 q28 2 28 28 z" fill="#F4ECD8"/>
+    <path d="M23 78 q-4 6 -2 12 l8 0 M77 78 q4 6 2 12 l-8 0" fill="#F4ECD8" stroke-width="2.5"/>
+    <path d="M24 90 q-3 10 0 18" stroke-width="8"/><path d="M24 90 q-3 10 0 18" stroke="${skin}" stroke-width="4.5"/>
+    <path d="M76 90 q3 10 0 18" stroke-width="8"/><path d="M76 90 q3 10 0 18" stroke="${skin}" stroke-width="4.5"/>
+    <path d="M14 104 q10 -12 20 0" stroke-width="2.5"/>
+    <rect x="10" y="104" width="28" height="22" rx="3" fill="#fff"/>
+    <path d="M10 111 h28 M10 118 h28" stroke-width="4"/><path d="M10 111 h28" stroke="#C9A97A" stroke-width="2"/>
+    <circle cx="24" cy="106" r="3.5" fill="${skin}"/>
+    <path d="M44 62 v6 h12 v-6" fill="${skin}"/>
+    <circle cx="50" cy="44" r="20" fill="${skin}"/>
+    <path d="M29 44 q-3 -24 21 -25 q24 1 21 25 q-3 -6 -6 -8 q-2 -8 -15 -8 q-13 0 -15 8 q-3 2 -6 8z" fill="#ECEAE6"/>
+    <path d="M34 30 q4 -4 8 -1 M46 26 q4 -3 8 0 M58 28 q4 -2 7 2" stroke-width="1.6"/>
+    ${glasses(44)}
+    <circle cx="42" cy="44" r="1.6" fill="${INK}" stroke="none"/><circle cx="58" cy="44" r="1.6" fill="${INK}" stroke="none"/>
+    <path d="M37 53 q2 1 4 0 M59 53 q2 1 4 0" stroke-width="1.4"/>
+    <path d="M44 56 q6 5 12 0" stroke-width="2.4"/>`);
+}
+
+/* Mom: dark hair pulled back, glasses, white blouse with red embroidery, brown patterned longyi, black shoulder bag */
+function momSVG(talking){
+  const skin = '#D9A47A';
+  const mouth = talking
+    ? `<ellipse cx="50" cy="56" rx="4.5" ry="3.6" fill="#C9372C" stroke-width="2.2"/>`
+    : `<path d="M44 55 q6 5 12 0" stroke-width="2.4"/>`;
+  return CHAR_WRAP(`
+    <path d="M30 130 L32 84 H68 L70 130Z" fill="#C08A52"/>
+    <path d="M34 92 h32 M34 104 h32 M34 116 h32" stroke="#7A4E28" stroke-width="1.6"/>
+    <g fill="#7A4E28" stroke="none"><circle cx="40" cy="98" r="2.4"/><circle cx="50" cy="98" r="2.4"/><circle cx="60" cy="98" r="2.4"/><circle cx="45" cy="110" r="2.4"/><circle cx="55" cy="110" r="2.4"/><circle cx="40" cy="122" r="2.4"/><circle cx="50" cy="122" r="2.4"/><circle cx="60" cy="122" r="2.4"/></g>
+    <path d="M22 92 q0 -26 28 -28 q28 2 28 28 z" fill="#FBF8F2"/>
+    <path d="M44 68 l6 4 l6 -4 M50 72 v18" stroke="#C9372C" stroke-width="2"/>
+    <g fill="#E05A68" stroke="none"><path d="M50 76 l3 3 l-3 3 l-3 -3z"/><path d="M50 84 l2.5 2.5 l-2.5 2.5 l-2.5 -2.5z"/><circle cx="44" cy="80" r="1.4"/><circle cx="56" cy="80" r="1.4"/></g>
+    <path d="M30 68 L66 98" stroke-width="3.5"/>
+    <path d="M60 94 h14 v14 h-14z" fill="#2B2B2B"/>
+    <path d="M26 84 q-6 10 2 20" stroke-width="9"/><path d="M26 84 q-6 10 2 20" stroke="${skin}" stroke-width="5"/>
+    <path d="M74 80 q14 -6 14 -26" stroke-width="10"/><path d="M74 80 q14 -6 14 -26" stroke="#FBF8F2" stroke-width="6"/>
+    <path d="M78 76 l3 -2 M82 72 l3 -2" stroke="#C9372C" stroke-width="2"/>
+    <circle cx="88" cy="50" r="6" fill="${skin}"/>
+    <path d="M44 62 v6 h12 v-6" fill="${skin}"/>
+    <circle cx="50" cy="44" r="20" fill="${skin}"/>
+    <circle cx="68" cy="32" r="7" fill="${INK}"/>
+    <path d="M30 42 q-2 -24 20 -24 q22 0 20 24 q-4 -12 -20 -13 q-16 1 -20 13z" fill="${INK}"/>
+    <path d="M40 22 q10 -4 20 0" stroke="#5A4636" stroke-width="1.4"/>
+    ${glasses(44)}
+    <circle cx="42" cy="44" r="1.6" fill="${INK}" stroke="none"/><circle cx="58" cy="44" r="1.6" fill="${INK}" stroke="none"/>
+    ${mouth}`);
+}
+
+/* =========================================================
+   GAME DATA (edit text here)
+   ========================================================= */
+const STEPS = [
+  { key: 'wash',  my: 'ဆန်ကို ရေဆေး',          en: 'Wash the rice',
+    hint: 'Always start by washing the rice in clean water to remove dust and extra starch.' },
+  { key: 'grind', my: 'ဆန်ကို ကြိတ်',           en: 'Grind the rice',
+    hint: 'Clean rice comes next: put it through the grinder so it comes out as a soft, wet dough.' },
+  { key: 'knead', my: 'မုန့်နှစ်ကိုနယ်/ဖိ',        en: 'Knead & press the dough',
+    hint: 'Knead and press the ground rice dough until it is soft and smooth.' },
+  { key: 'press', my: 'မုန့်နှစ်ကိုညှစ်',          en: 'Press into noodles',
+    hint: 'Squeeze the dough through the press to make thin noodle strands.' },
+  { key: 'rinse', my: 'ရေနွေးနဲ့တစ်ခါဆေး၊ ရေအေးနဲ့တစ်ခါဆေး', en: 'Rinse in hot, then cold water',
+    hint: 'Dip the fresh noodles in warm water, then in cold water, so they come out smooth and fine.' },
+  { key: 'drain', my: 'မုန့်ဖတ်ရလာတာကို ရေစစ်', en: 'Drain the noodles',
+    hint: 'Last step: drain the fresh noodles so the water runs off.' }
+];
+const STEP_MS = 3000;      // each step takes 3 seconds
+const WRONG_PENALTY = 2;   // seconds added for a wrong tap
+const HINT_PENALTY = 1;    // seconds added for using the hint button
+const AUTO_HINT_AFTER = 2; // wrong taps on the same step before a free hint appears
+
+/* sound = how customers pronounce each topping (spelled so the phone's voice says it like Burmese) */
+const TOPPINGS = [
+  { id: 'pegyaw', my: 'ပဲကြော်',       en: 'Bean fritters',   sound: 'peh jaw' },
+  { id: 'ngaphe', my: 'ငါးဖယ်',        en: 'Fish cake',       sound: 'ngah peh' },
+  { id: 'nannan', my: 'နံနံပင်',        en: 'Coriander',       sound: 'nun nun bin' },
+  { id: 'chili',  my: 'ငရုတ်သီးမှုန့်',   en: 'Chili powder',    sound: 'nga yoke thee hmone' },
+  { id: 'buthee', my: 'ဘူးသီးကြော်',     en: 'Gourd fritters',  sound: 'boo thee jaw' },
+  { id: 'egg',    my: 'အိုးဘဲဥ',        en: 'Boiled duck egg', sound: 'oh beh oo' }
+];
+const SAY_MOHINGA = 'moh hin gah';   // how customers say မုန့်ဟင်းခါး
+const TREASURES = [
+  { key: 'parasol',  my: 'ပုသိမ်ထီး', en: 'Pathein umbrella' },
+  { key: 'pagoda',   my: 'စေတီ',     en: 'Pagoda' },
+  { key: 'lacquer',  my: 'ယွန်းထည်',  en: 'Lacquerware' },
+  { key: 'chinlone', my: 'ခြင်းလုံး',  en: 'Chinlone ball' },
+  { key: 'thanaka',  my: 'သနပ်ခါး',  en: 'Thanaka' },
+  { key: 'lotus',    my: 'ကြာပန်း',   en: 'Lotus' }
+];
+const INTRO_MM = 'အိပ်ရာနိုးရင် အောက်ထပ်ဆင်းပြီး ဆိုင်ကူခင်းပေးဦး။\nမုန့်ဝယ်သူတွေ လာတော့မယ်။';
+const INTRO_EN = 'When you wake up, come downstairs and help set up the shop. Customers will be here soon!';
+const TOTAL_CUSTOMERS = 8;
+const PRICE = 1500;        // Kyat per bowl
+const MAX_TIP = 1000;      // extra Kyat for serving fast
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+const $ = id => document.getElementById(id);
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function show(id){ document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); $(id).classList.add('active'); window.scrollTo(0,0); }
+function starsHTML(n){ let h = ''; for (let i = 0; i < 3; i++) h += i < n ? DOODLES.star : DOODLES.starOff; return h; }
+function fmtKs(n){ return n.toLocaleString('en-US') + ' Ks'; }
+let actx;
+function beep(freq = 660, dur = 0.09, type = 'sine'){
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = type; o.frequency.value = freq; g.gain.value = 0.08;
+    o.connect(g); g.connect(actx.destination); o.start();
+    g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + dur);
+    o.stop(actx.currentTime + dur + 0.02);
+  } catch (e) {}
+}
+const good = () => { beep(660); setTimeout(() => beep(880), 90); };
+const bad  = () => beep(180, 0.2, 'square');
+/* =========================================================
+   SOUND: original Burmese-style music made in code
+   (no recordings are used, so there is nothing to license)
+   saung harp melody · pat waing drums · si bell · wa clapper
+   ========================================================= */
+const musicOn = true, voicesOn = true;   // music and voices are always on
+function ctx(){
+  if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; } }
+  if (actx.state === 'suspended') actx.resume();
+  return actx;
+}
+const NOTE = n => 261.63 * Math.pow(2, n / 12);          // semitones from middle C
+const MELODY = [                                         // 32 eighth-notes, null = rest
+   7, 9,12,null,  9, 7, 4,null,  2, 4, 7, 4,  2, 0,null,null,
+   4, 7, 9,12,   14,12, 9, 7,    9, 7, 4, 2,  0,null, 2,null ];
+const DRUMS = [-17,null,null,null, -12,null,null,null, -15,null,null,null, -12,null,-10,null];
+const music = { timer: null, step: 0, next: 0, tempo: 96, gain: null };
+let noiseBuf = null;
+
+function startMusic(){
+  const c = ctx(); if (!c || !musicOn || music.timer) return;
+  music.gain = c.createGain(); music.gain.connect(c.destination);
+  music.gain.gain.setValueAtTime(0.0001, c.currentTime);
+  music.gain.gain.exponentialRampToValueAtTime(0.5, c.currentTime + 1.5);
+  music.next = c.currentTime + 0.1; music.step = 0;
+  music.timer = setInterval(scheduleMusic, 25);
+}
+function stopMusic(){
+  if (!music.timer) return;
+  clearInterval(music.timer); music.timer = null;
+  const g = music.gain;
+  try { const t = actx.currentTime; g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(Math.max(g.gain.value, .0001), t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.4); setTimeout(() => g.disconnect(), 600); } catch (e) {}
+}
+function setTempo(bpm){ music.tempo = bpm; }
+function scheduleMusic(){
+  const c = actx, eighth = 60 / music.tempo / 2;
+  while (music.next < c.currentTime + 0.12) {
+    const s = music.step, t = music.next;
+    const m = MELODY[s % 32]; if (m !== null) saung(t, NOTE(m));
+    const d = DRUMS[s % 16];  if (d !== null) patwaing(t, NOTE(d));
+    if (s % 2 === 0) si(t);
+    if (s % 4 === 2) wa(t);
+    music.step++; music.next += eighth;
+  }
+}
+function tone(t, freq, type, peak, dur){
+  const c = actx, o = c.createOscillator(), g = c.createGain();
+  o.type = type; o.frequency.value = freq;
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(music.gain); o.start(t); o.stop(t + dur + 0.05);
+  return o;
+}
+function saung(t, f){ tone(t, f, 'triangle', 0.22, 0.7); tone(t, f * 2, 'sine', 0.05, 0.3); }
+function patwaing(t, f){ const o = tone(t, f * 1.6, 'sine', 0.35, 0.35); o.frequency.setValueAtTime(f * 1.6, t); o.frequency.exponentialRampToValueAtTime(f, t + 0.12); }
+function si(t){ tone(t, 2350, 'sine', 0.035, 0.25); tone(t, 3520, 'sine', 0.018, 0.18); }
+function wa(t){
+  const c = actx;
+  if (!noiseBuf) { noiseBuf = c.createBuffer(1, c.sampleRate * 0.1, c.sampleRate); const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+  const n = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+  n.buffer = noiseBuf; f.type = 'bandpass'; f.frequency.value = 1800; f.Q.value = 2;
+  g.gain.setValueAtTime(0.22, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+  n.connect(f); f.connect(g); g.connect(music.gain); n.start(t); n.stop(t + 0.08);
+}
+function duck(on){
+  if (!music.timer || !music.gain) return;
+  const g = music.gain.gain, t = actx.currentTime;
+  g.cancelScheduledValues(t); g.setValueAtTime(Math.max(g.value, .0001), t); g.exponentialRampToValueAtTime(on ? 0.12 : 0.5, t + 0.3);
+}
+
+/* ---- Customer voices (the phone's built-in text-to-speech) ---- */
+let VOICES = [];
+function loadVoices(){ try { VOICES = speechSynthesis.getVoices(); } catch (e) {} }
+if ('speechSynthesis' in window) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+/* Voice names are how phones tell male and female voices apart */
+const FEMALE_RE = /female|woman|samantha|victoria|karen|moira|tessa|susan|zira|hazel|serena|kate|fiona|veena|ava|allison|nicky|joanna|salli|kimberly|libby|sonia|jenny|aria|emma|amy|catherine|google us english|google uk english female/i;
+const MALE_RE   = /\bmale\b|\bman\b|david|daniel|alex\b|fred|george|james|mark|guy|thomas|aaron|arthur|rishi|oliver|tom\b|ryan|matthew|joey|justin|brian|eric|google uk english male/i;
+function pickVoice(cust){
+  const en = VOICES.filter(v => /^en/i.test(v.lang));
+  const male = cust && cust.male;
+  const fem = en.filter(v => FEMALE_RE.test(v.name));
+  const mal = en.filter(v => MALE_RE.test(v.name) && !FEMALE_RE.test(v.name));
+  let pool = male ? mal : fem.filter(v => !v.default);          // women: never the phone's default voice
+  if (!male && !pool.length) pool = fem;
+  const matched = pool.length > 0;
+  if (!pool.length) pool = en.filter(v => !v.default);
+  if (!pool.length) pool = en;
+  return { voice: pool.length ? pool[(cust ? cust.voiceSeed : 0) % pool.length] : null, matched };
+}
+function say(mmText, enText, cust){
+  if (!voicesOn || !('speechSynthesis' in window)) return;
+  try {
+    speechSynthesis.cancel();
+    const my = VOICES.find(v => /^my/i.test(v.lang));               // Burmese voice, if the phone has one
+    const male = !!(cust && cust.male), old = !!(cust && cust.old);
+    const u = new SpeechSynthesisUtterance(my ? mmText : enText);
+    let matched = false;
+    if (my) { u.voice = my; u.lang = my.lang; }
+    else { const pv = pickVoice(cust); matched = pv.matched; if (pv.voice) { u.voice = pv.voice; u.lang = pv.voice.lang; } else u.lang = 'en-US'; }
+    /* if the phone has no voice of the right gender, change the pitch instead */
+    let pitch = male ? (matched ? .9 : .55) : (matched ? 1.15 : 1.55);
+    if (old) pitch -= .15;
+    u.pitch = Math.min(2, Math.max(.1, pitch + (Math.random() - .5) * .1));
+    u.rate = old ? .82 : .95;
+    duck(true); u.onend = u.onerror = () => duck(false);
+    speechSynthesis.speak(u);
+  } catch (e) {}
+}
+function hush(){ try { speechSynthesis.cancel(); } catch (e) {} duck(false); }
+
+/* ---- sound buttons ---- */
+const ICON_SPEAK = `<svg viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3z" fill="#F4A6B7" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/><path d="M16 8q3 4 0 8M19 5q5 7 0 14" stroke="${INK}" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
+function paintSoundBtns(){ $('btn-say').innerHTML = ICON_SPEAK; }
+/* Browsers block sound until the player first touches the page,
+   so music and voices switch on automatically at the very first tap, click or key press. */
+function unlockSound(){
+  ctx(); startMusic();
+  try { if ('speechSynthesis' in window) speechSynthesis.speak(new SpeechSynthesisUtterance('')); } catch (e) {}
+  if (music.timer) ['pointerdown','touchstart','keydown','click'].forEach(ev => document.removeEventListener(ev, unlockSound, true));
+}
+['pointerdown','touchstart','keydown','click'].forEach(ev => document.addEventListener(ev, unlockSound, true));
+/* try straight away too (works where the browser allows autoplay) */
+window.addEventListener('load', () => { ctx(); if (actx && actx.state === 'running') startMusic(); });
+/* resume music if the player switches apps and comes back */
+document.addEventListener('visibilitychange', () => { if (!document.hidden && actx) { actx.resume(); startMusic(); } });
+
+function loadBest(){ try { return JSON.parse(localStorage.getItem('mohinga-best') || 'null'); } catch(e){ return null; } }
+function saveBest(v){ try { localStorage.setItem('mohinga-best', JSON.stringify(v)); } catch(e){} }
+
+/* =========================================================
+   PLAYER NAME + INTRO
+   ========================================================= */
+let player = '';
+let afterName = 'intro';      // 'intro' (Start) or 'l2' (Skip to Level 2)
+try { player = localStorage.getItem('mohinga-name') || ''; } catch (e) {}
+function applyName(){ document.querySelectorAll('[data-name]').forEach(el => { el.textContent = player || 'Friend'; }); }
+
+function askName(next){
+  afterName = next;
+  $('name-input').value = player; $('name-err').textContent = '';
+  show('s-name');
+  setTimeout(() => $('name-input').focus(), 300);
+}
+function submitName(){
+  const v = $('name-input').value.trim();
+  if (!v) { $('name-err').textContent = 'Please type your name · နာမည် ရေးပေးပါ'; beep(220, .12, 'square'); return; }
+  player = v;
+  try { localStorage.setItem('mohinga-name', player); } catch (e) {}
+  applyName(); good();
+  if (afterName === 'l2') startL2(); else startIntro();
+}
+$('btn-name').addEventListener('click', submitName);
+$('name-input').addEventListener('keydown', e => { if (e.key === 'Enter') submitName(); });
+$('btn-name-back').addEventListener('click', () => show('s-start'));
+
+/* split text into whole characters so Burmese letters + marks type out cleanly */
+function graphemes(str){
+  try { return [...new Intl.Segmenter('my', { granularity: 'grapheme' }).segment(str)].map(s => s.segment); }
+  catch (e) { return [...str]; }
+}
+let intro = { timer: null, mouth: null, done: false };
+function startIntro(){
+  setTempo(88);
+  show('s-intro');
+  clearInterval(intro.timer); clearInterval(intro.mouth);
+  intro.done = false;
+  const mom = $('intro-mom');
+  const gma = $('intro-gma');
+  [mom, gma].forEach(el => { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; });
+  mom.innerHTML = momSVG(false);
+  gma.innerHTML = grandmaSVG();
+  $('talk-name').textContent = player + '!';
+  $('talk-mm').innerHTML = ''; $('talk-en').innerHTML = '';
+  $('btn-go').classList.remove('ready'); $('tap-note').style.display = '';
+  const mm = graphemes(INTRO_MM), en = graphemes(INTRO_EN);
+  let i = 0, j = 0, open = false;
+  setTimeout(() => {
+    intro.mouth = setInterval(() => { open = !open; mom.innerHTML = momSVG(open); }, 160);
+    intro.timer = setInterval(() => {
+      if (i < mm.length) { i++; $('talk-mm').innerHTML = mm.slice(0, i).join('') + '<span class="caret"></span>'; if (i % 3 === 0) beep(520 + Math.random() * 120, .03, 'triangle'); }
+      else if (j < en.length) { $('talk-mm').textContent = INTRO_MM; j += 2; $('talk-en').innerHTML = en.slice(0, j).join('') + '<span class="caret"></span>'; }
+      else finishIntro();
+    }, 45);
+  }, 700);
+}
+function finishIntro(){
+  clearInterval(intro.timer); clearInterval(intro.mouth);
+  intro.done = true;
+  $('talk-mm').textContent = INTRO_MM; $('talk-en').textContent = INTRO_EN;
+  $('intro-mom').innerHTML = momSVG(false);
+  $('tap-note').style.display = 'none';
+  $('btn-go').classList.add('ready');
+}
+$('intro-talk').addEventListener('click', () => { if (!intro.done) finishIntro(); });
+$('intro-scene').addEventListener('click', () => { if (!intro.done) finishIntro(); });
+$('btn-go').addEventListener('click', startL1);
+
+function decorate(){
+  document.querySelectorAll('[data-art]').forEach(el => { el.innerHTML = DOODLES[el.dataset.art]; });
+  document.querySelectorAll('[data-bunting]').forEach(el => {
+    el.innerHTML = ['parasol','lotus','parasol','chinlone','parasol','lotus','parasol'].map(k => art(k)).join('');
+  });
+  $('treasures').innerHTML = TREASURES.map(t =>
+    `<div class="treasure">${art(t.key)}<span class="my">${t.my}</span><small>${t.en}</small></div>`).join('');
+  const spots = [['parasol',4,6,-12],['pagoda',82,4,6],['lotus',2,44,10],['chinlone',84,40,-8],['lacquer',6,82,8],['thanaka',80,84,-10]];
+  $('bg-deco').innerHTML = spots.map(([k,x,y,r]) =>
+    `<span class="art" style="left:${x}%;top:${y}%;transform:rotate(${r}deg)">${DOODLES[k]}</span>`).join('');
+}
+
+/* =========================================================
+   LEVEL 1: make Mote Phat
+   ========================================================= */
+let l1 = {}, l1Clock = null;
+
+function startL1(){
+  setTempo(100); hush();
+  l1 = { next: 0, mistakes: 0, stepMistakes: 0, hints: 0, hinted: false, start: performance.now(), penalty: 0, busy: false };
+  show('s-l1');
+  $('l1-work').classList.remove('on'); $('l1-pick').style.display = '';
+  renderL1();
+  clearInterval(l1Clock);
+  l1Clock = setInterval(() => { $('l1-clock').innerHTML = clock + ' ' + l1Elapsed().toFixed(1) + 's'; }, 100);
+}
+function l1Elapsed(){ return (performance.now() - l1.start) / 1000 + l1.penalty; }
+
+function renderL1(){
+  let t = '';
+  STEPS.forEach((s, i) => {
+    const cls = i < l1.next ? 'done' : (i === l1.next ? 'now' : '');
+    t += `<div class="dot ${cls}">${i < l1.next ? '✓' : i + 1}</div><div class="bar-line"></div>`;
+  });
+  $('l1-track').innerHTML = t + `<div class="dot goal">${art('motephat')}</div>`;
+
+  $('l1-choices').innerHTML = shuffle(STEPS.map((_, i) => i)).map(i => {
+    const s = STEPS[i];
+    return `<button class="choice ${i < l1.next ? 'used' : ''}" data-i="${i}">
+      ${art(s.key)}<span class="mm">${s.my}</span><span class="en">${s.en}</span></button>`;
+  }).join('');
+
+  l1.stepMistakes = 0; l1.hinted = false;
+  $('l1-hint').classList.remove('on');
+  $('btn-hint').disabled = false;
+}
+
+function showHint(free){
+  if (l1.busy || l1.hinted) return;
+  l1.hinted = true; l1.hints++;
+  if (!free) l1.penalty += HINT_PENALTY;
+  const s = STEPS[l1.next];
+  $('l1-hint').innerHTML = `<b>Hint · Step ${l1.next + 1}:</b> ${s.hint}<br><span class="my"><b>${s.my}</b></span> · ${s.en}`;
+  $('l1-hint').classList.add('on');
+  const card = document.querySelector(`.choice[data-i="${l1.next}"]`);
+  if (card) card.classList.add('hint');
+  $('btn-hint').disabled = true;
+  beep(990, 0.08, 'triangle');
+}
+$('btn-hint').addEventListener('click', () => showHint(false));
+
+$('l1-choices').addEventListener('click', e => {
+  const b = e.target.closest('.choice');
+  if (!b || l1.busy) return;
+  const i = +b.dataset.i;
+  if (i === l1.next) {
+    good(); doStep(i);
+  } else {
+    bad(); l1.mistakes++; l1.stepMistakes++; l1.penalty += WRONG_PENALTY;
+    b.classList.remove('wrong'); void b.offsetWidth; b.classList.add('wrong');
+    if (l1.stepMistakes >= AUTO_HINT_AFTER) showHint(true);
+  }
+});
+
+function doStep(i){
+  l1.busy = true;
+  const s = STEPS[i];
+  $('l1-work-art').innerHTML = DOODLES[s.key];
+  $('l1-work-mm').textContent = s.my;
+  $('l1-work-en').textContent = s.en + '…';
+  $('l1-pick').style.display = 'none';
+  $('l1-work').classList.add('on');
+  const bar = $('l1-prog');
+  bar.style.transition = 'none'; bar.style.width = '0';
+  void bar.offsetWidth;
+  bar.style.transition = `width ${STEP_MS}ms linear`; bar.style.width = '100%';
+  setTimeout(() => {
+    l1.next++; l1.busy = false;
+    $('l1-work').classList.remove('on'); $('l1-pick').style.display = '';
+    beep(520, 0.06);
+    if (l1.next >= STEPS.length) finishL1(); else renderL1();
+  }, STEP_MS);
+}
+
+function finishL1(){
+  clearInterval(l1Clock);
+  const time = l1Elapsed();
+  const stars = l1.mistakes === 0 && l1.hints === 0 ? 3 : l1.mistakes <= 2 ? 2 : 1;
+  $('l1-time').textContent = time.toFixed(1) + 's';
+  $('l1-miss').textContent = l1.mistakes;
+  $('l1-hints').textContent = l1.hints;
+  $('l1-stars').innerHTML = starsHTML(stars);
+  good(); setTimeout(good, 200);
+  show('s-l1done');
+}
+
+/* =========================================================
+   LEVEL 2: run the shop
+   ========================================================= */
+let s2 = {}, s2Tick = null;
+
+function startL2(){
+  setTempo(116);
+  s2 = { n: 0, served: 0, kyat: 0, hearts: 3, sel: new Set(), order: new Set(), patience: 1, left: 1, locked: true, cust: newCustomer(), mood: '' };
+  show('s-l2');
+  $('l2-face').innerHTML = customerSVG(s2.cust, '');
+  renderTops(); renderHud(); $('l2-feedback').textContent = '';
+  setTimeout(nextCustomer, 400);
+}
+
+function renderHud(){
+  $('l2-count').innerHTML = `${person} ${Math.max(s2.n,1)}/${TOTAL_CUSTOMERS}`;
+  let h = ''; for (let i = 0; i < 3; i++) h += heart(i < s2.hearts);
+  $('l2-hearts').innerHTML = h;
+  $('l2-kyat').innerHTML = coin + ' ' + fmtKs(s2.kyat);
+}
+
+function renderTops(){
+  $('l2-tops').innerHTML = TOPPINGS.map(t =>
+    `<button class="top ${s2.sel.has(t.id) ? 'on' : ''}" data-id="${t.id}">
+      ${art(t.id)}<span class="mm">${t.my}</span><span class="en">${t.en}</span></button>`
+  ).join('');
+  renderBowl(); renderOrder();
+}
+
+const SPOTS = [[50,28],[74,44],[66,72],[36,74],[26,46],[50,52]];
+function renderBowl(){
+  const chosen = TOPPINGS.filter(t => s2.sel.has(t.id));
+  $('l2-bowl-tops').innerHTML = chosen.map((t, k) =>
+    `<span class="topping" style="left:${SPOTS[k][0]}%;top:${SPOTS[k][1]}%">${DOODLES[t.id]}</span>`).join('');
+}
+
+function renderOrder(){
+  $('l2-order').innerHTML = TOPPINGS.filter(t => s2.order.has(t.id)).map(t =>
+    `<span class="chip ${s2.sel.has(t.id) ? 'ok' : ''}">${art(t.id)}${t.my}</span>`).join('');
+}
+
+function orderLines(){
+  const ts = TOPPINGS.filter(t => s2.order.has(t.id));
+  const mm = `မုန့်ဟင်းခါး တစ်ပွဲ ပေးပါ။ ${ts.map(t => t.my).join('၊ ')} ထည့်ပေးပါ။`;
+  const names = ts.map(t => t.sound);
+  const list = names.length > 1 ? names.slice(0, -1).join(', ') + ', and ' + names[names.length - 1] : names[0];
+  return [mm, `One ${SAY_MOHINGA}, please. With ${list}.`];
+}
+function sayOrder(){ const [mm, en] = orderLines(); say(mm, en, s2.cust); }
+$('btn-say').addEventListener('click', sayOrder);
+
+function setMood(m){
+  if (s2.mood === m) return;
+  s2.mood = m; $('l2-face').innerHTML = customerSVG(s2.cust, m);
+}
+
+function nextCustomer(){
+  if (s2.n >= TOTAL_CUSTOMERS || s2.hearts <= 0) return endGame();
+  s2.n++;
+  const count = 2 + Math.floor(Math.random() * (s2.n <= 3 ? 2 : 3));   // 2-3 toppings early, 2-4 later
+  s2.order = new Set(shuffle(TOPPINGS.map(t => t.id)).slice(0, count));
+  s2.sel = new Set();
+  s2.patience = Math.max(8, 16 - s2.n);                                // gets faster each customer
+  s2.left = s2.patience;
+  s2.locked = false;
+  s2.cust = newCustomer(); s2.mood = null; setMood('');
+
+  const face = $('l2-face'); face.className = 'face';
+  const card = $('l2-customer-card');
+  card.classList.remove('slide-in'); void card.offsetWidth; card.classList.add('slide-in');
+  $('l2-feedback').textContent = ''; $('l2-feedback').className = 'feedback';
+  renderTops(); renderHud(); beep(740, 0.07);
+  setTimeout(sayOrder, 350);
+
+  clearInterval(s2Tick);
+  s2Tick = setInterval(() => {
+    s2.left -= 0.1;
+    const pct = Math.max(0, s2.left / s2.patience) * 100;
+    const bar = $('l2-patience');
+    bar.style.width = pct + '%';
+    bar.style.background = pct > 50 ? 'var(--green)' : pct > 25 ? 'var(--turmeric)' : 'var(--red)';
+    if (pct <= 30) setMood('worried');
+    if (s2.left <= 0) customerDone(false, 'Too slow! The customer left…');
+  }, 100);
+}
+
+$('l2-tops').addEventListener('click', e => {
+  const b = e.target.closest('.top');
+  if (!b || s2.locked) return;
+  const id = b.dataset.id;
+  s2.sel.has(id) ? s2.sel.delete(id) : s2.sel.add(id);
+  beep(s2.sel.has(id) ? 600 : 420, 0.05);
+  renderTops();
+});
+
+$('btn-clear').addEventListener('click', () => { if (s2.locked) return; s2.sel.clear(); renderTops(); });
+
+$('btn-serve').addEventListener('click', () => {
+  if (s2.locked) return;
+  const correct = s2.sel.size === s2.order.size && [...s2.order].every(id => s2.sel.has(id));
+  if (correct) {
+    const tip = Math.round((s2.left / s2.patience) * MAX_TIP / 100) * 100;
+    s2.kyat += PRICE + tip; s2.served++;
+    customerDone(true, `ကျေးဇူးတင်ပါတယ် ${player || ''}! +${fmtKs(PRICE + tip)}`);
+  } else {
+    customerDone(false, 'မှားသွားပြီ! Wrong toppings');
+  }
+});
+
+function customerDone(ok, msg){
+  s2.locked = true; clearInterval(s2Tick);
+  if (!ok) s2.hearts--;
+  const fb = $('l2-feedback');
+  fb.textContent = msg; fb.className = 'feedback my ' + (ok ? 'good' : 'bad');
+  setMood(ok ? 'happy' : 'angry');
+  if (ok) { $('l2-face').classList.add('happy'); good(); say('ကျေးဇူးပဲ', 'Thank you!', s2.cust); } else { bad(); hush(); }
+  renderHud();
+  setTimeout(nextCustomer, 1300);
+}
+
+function endGame(){
+  clearInterval(s2Tick); setTempo(92);
+  const stars = s2.served >= 7 ? 3 : s2.served >= 4 ? 2 : s2.served >= 1 ? 1 : 0;
+  $('end-art').innerHTML = DOODLES[s2.hearts > 0 ? 'pagoda' : 'emptybowl'];
+  $('end-title').textContent = s2.hearts > 0 ? 'Shop closed!' : 'Out of hearts!';
+  $('end-sub').textContent = s2.hearts > 0 ? `A great morning of selling Mohinga, ${player}!` : `Too many unhappy customers. Try again, ${player}!`;
+  $('end-stars').innerHTML = starsHTML(stars);
+  $('end-served').textContent = `${s2.served}/${TOTAL_CUSTOMERS}`;
+  $('end-kyat').textContent = fmtKs(s2.kyat);
+  const best = loadBest();
+  if (!best || s2.kyat > best.kyat) { saveBest({ kyat: s2.kyat, name: player }); $('end-best').textContent = `New best score, ${player}!`; }
+  else $('end-best').textContent = `Best: ${fmtKs(best.kyat)}${best.name ? ' (' + best.name + ')' : ''}`;
+  showBest();
+  show('s-end');
+}
+
+function showBest(){
+  const best = loadBest();
+  $('best-line').textContent = best ? 'Your best: ' + fmtKs(best.kyat) : '';
+}
+
+/* =========================================================
+   START
+   ========================================================= */
+$('btn-start').addEventListener('click', () => askName('intro'));
+$('btn-skip').addEventListener('click', () => askName('l2'));
+$('btn-open').addEventListener('click', startL2);
+$('btn-again').addEventListener('click', startIntro);
+$('btn-shop-again').addEventListener('click', startL2);
+decorate();
+applyName();
+paintSoundBtns();
+showBest();
+</script>
+</body>
+</html>
